@@ -1,4 +1,4 @@
-package br.com.facef.rabbitmqdlq.consumer;
+package br.com.facef.rabbitmqplt.consumer;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.facef.rabbitmqdlq.configuration.DirectExchangeConfiguration;
+import br.com.facef.rabbitmqplt.configuration.DirectExchangeConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
@@ -26,15 +26,12 @@ public class MessageConsumer {
 			putIntoParkingLot(message);
 			return;
 		}
-		// By default the messages will be requeued
 		throw new RuntimeException("Business Rule Exception");
-		// To dont requeue message can throw AmqpRejectAndDontRequeueException
-		// throw new AmqpRejectAndDontRequeueException("Business Rule Exception");
 	}
 
 	private boolean hasExceededRetryCount(Message in) {
 		List<Map<String, ?>> xDeathHeader = in.getMessageProperties().getXDeathHeader();
-		if (xDeathHeader != null && xDeathHeader.size() >= 1) {
+		if (xDeathHeader != null && !xDeathHeader.isEmpty()) {
 			Long count = (Long) xDeathHeader.get(0).get("count");
 			return count >= 3;
 		}

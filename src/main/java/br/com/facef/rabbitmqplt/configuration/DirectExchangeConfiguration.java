@@ -1,4 +1,4 @@
-package br.com.facef.rabbitmqdlq.configuration;
+package br.com.facef.rabbitmqplt.configuration;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -37,7 +37,7 @@ public class DirectExchangeConfiguration {
 	@Bean
 	Queue orderMessagesDeadLetterQueue() {
 		return QueueBuilder.durable(ORDER_MESSAGES_QUEUE_DLQ_NAME).deadLetterExchange(DIRECT_EXCHANGE_NAME)
-				.deadLetterRoutingKey(PRIMARY_ROUTING_KEY).ttl(10000).build();
+				.deadLetterRoutingKey(PRIMARY_ROUTING_KEY).ttl(5000).build();
 	}
 
 	@Bean
